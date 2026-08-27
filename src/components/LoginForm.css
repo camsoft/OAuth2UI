@@ -1,0 +1,101 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+}
+
+.login-form h2 {
+  margin: 0 0 16px;
+  color: var(--text-h);
+  text-align: center;
+}
+
+.login-form label {
+  font-size: 14px;
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.login-form input {
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  color: var(--text-h);
+  background: var(--bg);
+}
+
+.login-form input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.login-form__password-wrapper {
+  position: relative;
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.login-form__password-wrapper input {
+  flex: 1;
+  margin-bottom: 0;
+  padding-right: 40px;
+}
+
+.login-form .login-form__toggle-password {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  margin-top: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.login-form .login-form__toggle-password:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.login-form button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-form__error {
+  color: #d33;
+  font-size: 14px;
+  margin: 4px 0 0;
+}
+
+.login-form__hint {
+  margin-top: 16px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--text);
+}

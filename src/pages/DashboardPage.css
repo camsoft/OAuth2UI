@@ -1,0 +1,28 @@
+.dashboard-page {
+  min-height: 100vh;
+  padding: 24px 32px;
+}
+
+.dashboard-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dashboard-page__header button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+}
+
+.dashboard-page__content {
+  margin-top: 64px;
+  max-width: 640px;
+}
+
+.dashboard-page__content h1 {
+  color: var(--text-h);
+}

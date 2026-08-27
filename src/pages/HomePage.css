@@ -1,0 +1,27 @@
+.home-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 32px 16px;
+}
+
+.home-page__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  max-width: 480px;
+}
+
+.home-page__intro h1 {
+  margin: 0;
+  color: var(--text-h);
+}
+
+.home-page__intro p {
+  margin: 0;
+}
