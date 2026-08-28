@@ -16,7 +16,7 @@ export function HomePage() {
       <div className="home-page__intro">
         <Logo />
         <h1>Code Pro Training</h1>
-        <p>Learn how to secure a Web API with JWT bearer tokens and consume it from React.</p>
+        <p>Learn how to secure a Web API with OAuth 2.0 (Authorization Code + PKCE) and consume it from React.</p>
       </div>
 
       <LoginForm />

@@ -1,50 +1,50 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
-import type { AuthUser, LoginRequest } from '../types/auth'
+import type { AuthUser } from '../types/auth'
 import * as authService from '../services/authService'
 
 interface AuthContextValue {
   user: AuthUser | null
-  token: string | null
   isAuthenticated: boolean
-  login: (credentials: LoginRequest) => Promise<void>
-  logout: () => void
+  /** Redirects the browser to the Authorization Server's /connect/authorize endpoint. */
+  login: () => Promise<void>
+  /** Completes the flow after the /callback redirect by exchanging the code for tokens. */
+  completeLogin: (code: string, state: string) => Promise<void>
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
-function getInitialState(): { token: string | null; user: AuthUser | null } {
-  const storedToken = authService.getToken()
-
-  if (!authService.isTokenValid(storedToken)) {
-    return { token: null, user: null }
-  }
-
-  return { token: storedToken, user: authService.getUserFromToken(storedToken) }
+function getInitialUser(): AuthUser | null {
+  return authService.isAccessTokenValid() ? authService.getCurrentUser() : null
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [{ token, user }, setState] = useState(getInitialState)
+  const [user, setUser] = useState<AuthUser | null>(getInitialUser)
 
-  const handleLogin = useCallback(async (credentials: LoginRequest) => {
-    const newToken = await authService.login(credentials)
-    setState({ token: newToken, user: authService.getUserFromToken(newToken) })
+  const handleLogin = useCallback(async () => {
+    await authService.redirectToAuthorize()
   }, [])
 
-  const handleLogout = useCallback(() => {
-    authService.logout()
-    setState({ token: null, user: null })
+  const handleCompleteLogin = useCallback(async (code: string, state: string) => {
+    const newUser = await authService.exchangeCodeForTokens(code, state)
+    setUser(newUser)
+  }, [])
+
+  const handleLogout = useCallback(async () => {
+    await authService.logout()
+    setUser(null)
   }, [])
 
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
-      token,
-      isAuthenticated: Boolean(token),
+      isAuthenticated: Boolean(user),
       login: handleLogin,
+      completeLogin: handleCompleteLogin,
       logout: handleLogout,
     }),
-    [user, token, handleLogin, handleLogout]
+    [user, handleLogin, handleCompleteLogin, handleLogout]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
@@ -60,3 +60,4 @@ export function useAuth(): AuthContextValue {
 
   return context
 }
+

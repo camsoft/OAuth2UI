@@ -1,70 +1,36 @@
 import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import './LoginForm.css'
 
 export function LoginForm() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isRedirecting, setIsRedirecting] = useState(false)
 
   const { login } = useAuth()
-  const navigate = useNavigate()
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  async function handleSignIn() {
     setError(null)
-    setIsSubmitting(true)
+    setIsRedirecting(true)
 
     try {
-      await login({ username, password })
-      navigate('/dashboard')
+      // Redirects the whole page to the Authorization Server's
+      // /connect/authorize endpoint; the user signs in there and is sent
+      // back to /callback with an authorization code.
+      await login()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
-    } finally {
-      setIsSubmitting(false)
+      setIsRedirecting(false)
     }
   }
 
   return (
-    <form className="login-form" onSubmit={handleSubmit}>
+    <div className="login-form">
       <h2>Sign in</h2>
 
-      <label htmlFor="username">Username</label>
-      <input
-        id="username"
-        name="username"
-        type="text"
-        autoComplete="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-      />
-
-      <label htmlFor="password">Password</label>
-      <div className="login-form__password-wrapper">
-        <input
-          id="password"
-          name="password"
-          type={showPassword ? 'text' : 'password'}
-          autoComplete="current-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button
-          type="button"
-          className="login-form__toggle-password"
-          onClick={() => setShowPassword((prev) => !prev)}
-          aria-label={showPassword ? 'Hide password' : 'Show password'}
-          aria-pressed={showPassword}
-        >
-          {showPassword ? '🙈' : '👁️'}
-        </button>
-      </div>
+      <p className="login-form__hint">
+        You&rsquo;ll be redirected to sign in, then sent back here automatically. Try{' '}
+        <code>admin</code> / <code>Admin123!</code> or <code>member</code> / <code>Member123!</code>
+      </p>
 
       {error && (
         <p className="login-form__error" role="alert">
@@ -72,13 +38,10 @@ export function LoginForm() {
         </p>
       )}
 
-      <button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Signing in…' : 'Sign in'}
+      <button type="button" onClick={handleSignIn} disabled={isRedirecting}>
+        {isRedirecting ? 'Redirecting…' : 'Sign in'}
       </button>
-
-      <p className="login-form__hint">
-        Try <code>admin</code> / <code>Admin123!</code> or <code>member</code> / <code>Member123!</code>
-      </p>
-    </form>
+    </div>
   )
 }
+

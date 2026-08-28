@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { HomePage } from './pages/HomePage'
 import { DashboardPage } from './pages/DashboardPage'
+import { CallbackPage } from './pages/CallbackPage'
 import './App.css'
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/callback" element={<CallbackPage />} />
           <Route
             path="/dashboard"
             element={
@@ -27,3 +29,4 @@ function App() {
 }
 
 export default App
+
